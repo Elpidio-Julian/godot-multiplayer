@@ -1,5 +1,6 @@
 using Dotplay.Game;
 using Godot;
+#nullable enable
 
 namespace Dotplay.Physics;
 

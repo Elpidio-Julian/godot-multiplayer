@@ -1,4 +1,5 @@
 namespace Acruxx.Player;
+#nullable enable
 
 using Godot;
 

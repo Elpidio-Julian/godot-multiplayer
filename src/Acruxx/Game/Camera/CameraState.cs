@@ -1,4 +1,5 @@
 ﻿namespace Acruxx.Camera;
+#nullable enable
 
 using Acruxx.Common.StateMachine;
 

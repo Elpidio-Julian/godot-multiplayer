@@ -1,4 +1,5 @@
 ﻿using System;
+#nullable enable
 using Acruxx.Shared.Player;
 using Dotplay;
 using Dotplay.Game;
@@ -53,7 +54,7 @@ public partial class PlayerAnimationComponent : Node, IPlayerComponent
     }
 
     /// <inheritdoc />
-    public NetworkCharacter BaseComponent { get; set; }
+    public required NetworkCharacter BaseComponent { get; set; }
 
     private AnimationPlayer? _animationPlayer;
     private AnimationTree? _animationTree;
@@ -107,7 +108,10 @@ public partial class PlayerAnimationComponent : Node, IPlayerComponent
         {
             if (blendPosition.Length() > 0.001)
             {
-                this._animationPlayer.SpeedScale = factor + 1f;
+                if (this._animationPlayer != null)
+                {
+                    this._animationPlayer.SpeedScale = factor + 1f;
+                }
                 this.TransitionTo(AnimationStates.RUN);
             }
             else

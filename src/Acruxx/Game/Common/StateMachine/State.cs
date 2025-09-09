@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+#nullable enable
 using Godot;
 
 namespace Acruxx.Common.StateMachine;

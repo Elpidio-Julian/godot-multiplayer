@@ -1,4 +1,5 @@
 using System;
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Dotplay.Input;
@@ -122,13 +123,15 @@ public partial class NetworkClientWorld : NetworkWorld
         var simTickRate = 1f / (float)this.GetPhysicsProcessDeltaTime();
 
         this.SimulationAdjuster = this.ClientSimulationAdjuster = new ClientSimulationAdjuster(simTickRate / 2);
-        this.WorldTick = this.ClientSimulationAdjuster.GuessClientTick((float)this.GetPhysicsProcessDeltaTime(), initalWorldTick, this.NetService.Ping);
+        var ping = this.NetService?.Ping ?? 0;
+        this.WorldTick = this.ClientSimulationAdjuster.GuessClientTick((float)this.GetPhysicsProcessDeltaTime(), initalWorldTick, ping);
     }
 
     /// <inheritdoc />
     internal override void InternalTick(float interval)
     {
-        if (this.LocalPlayer == null || this.LocalPlayer.State != PlayerConnectionState.Initialized)
+        var lpTick = this.LocalPlayer;
+        if (lpTick == null || lpTick.State != PlayerConnectionState.Initialized)
             return;
 
         this.ProcessLocalInput();
@@ -198,7 +201,7 @@ public partial class NetworkClientWorld : NetworkWorld
         // Logger.SetDebugUI("cl_rewinds", replayedStates.ToString());
         //    Logger.SetDebugUI("incoming_state_excess", excessWorldStateAvg.Average().ToString());
 
-        this.ClientSimulationAdjuster.Monitoring();
+        this.ClientSimulationAdjuster?.Monitoring();
     }
 
     /// <summary>
@@ -214,7 +217,7 @@ public partial class NetworkClientWorld : NetworkWorld
 
         var inputs = new GeneralPlayerInput();
 
-        var inputComponent = this.LocalPlayer.Components.Get<NetworkInput>();
+        var inputComponent = this.LocalPlayer!.Components.Get<NetworkInput>();
         var lastTicks = this.WorldTick - this.LastServerWorldTick;
         if (this.ServerVars.Get("sv_freze_client", false) && lastTicks >= maxStaleServerStateTicks)
         {
@@ -237,7 +240,7 @@ public partial class NetworkClientWorld : NetworkWorld
         // Update our snapshot buffers.
         uint bufidx = this.WorldTick % MaxTicks;
         this.LocalPlayerInputsSnapshots[bufidx] = inputs;
-        this.LocalPlayerStateSnapshots[bufidx] = this.LocalPlayer.ToNetworkState();
+        this.LocalPlayerStateSnapshots[bufidx] = this.LocalPlayer!.ToNetworkState();
         this.LocalPlayerWorldTickSnapshots[bufidx] = this.LastServerWorldTick;
 
         // Send a command for all inputs not yet acknowledged from the server.
@@ -357,6 +360,12 @@ public partial class NetworkClientWorld : NetworkWorld
                 AsyncLoader.Loader.LoadResource(playerUpdate.ResourcePath, (res) =>
                 {
                     var resource = (res as PackedScene);
+                    if (resource == null)
+                    {
+                        Logger.LogDebug(this, $"Failed to load PackedScene at '{playerUpdate.ResourcePath}'");
+                        this._playerCreationInProcess.Remove(playerUpdate.NetworkId);
+                        return;
+                    }
                     // resource.ResourceLocalToScene = true;
                     NetworkCharacter player = resource.Instantiate<NetworkCharacter>();
 
@@ -405,6 +414,11 @@ public partial class NetworkClientWorld : NetworkWorld
             return;
         }
 
+        if (this.LocalPlayer == null)
+        {
+            return;
+        }
+
         var incomingState = this._worldStateQueue.Dequeue();
 
         //set the last server world tick
@@ -418,7 +432,7 @@ public partial class NetworkClientWorld : NetworkWorld
             this.LastAckedInputTick = incomingState.YourLatestInputTick;
 
             int actualTickLead = (int)this.LastAckedInputTick - (int)this.LastServerWorldTick + 1;
-            this.ClientSimulationAdjuster.NotifyActualTickLead(actualTickLead, false, this.ServerVars.Get("sv_agressive_lag_reduction", true));
+            this.ClientSimulationAdjuster?.NotifyActualTickLead(actualTickLead, false, this.ServerVars.Get("sv_agressive_lag_reduction", true));
         }
 
         // For debugging purposes, log the local lead we're running at
@@ -426,14 +440,15 @@ public partial class NetworkClientWorld : NetworkWorld
         Logger.SetDebugUI("cl_local_tick", localWorldTickLead.ToString());
 
         PlayerState incomingLocalPlayerState = new();
+        var lp = this.LocalPlayer;
         if (incomingState.PlayerStates != null)
         {
             foreach (var playerState in incomingState.PlayerStates)
             {
-                if (playerState.NetworkId == this.LocalPlayer!.NetworkId)
+                if (lp != null && playerState.NetworkId == lp.NetworkId)
                 {
                     incomingLocalPlayerState = playerState;
-                    this.LocalPlayer.IncomingLocalPlayerState = incomingLocalPlayerState;
+                    lp.IncomingLocalPlayerState = incomingLocalPlayerState;
                 }
                 else
                 {
@@ -463,7 +478,7 @@ public partial class NetworkClientWorld : NetworkWorld
             Logger.LogDebug(this, "Got a future world state, snapping to latest state.");
             // TODO: We need to add local estimated latency here like we do during init.
             this.WorldTick = incomingState.WorldTick;
-            this.LocalPlayer.ApplyNetworkState(incomingLocalPlayerState);
+            this.LocalPlayer?.ApplyNetworkState(incomingLocalPlayerState);
             return;
         }
 
@@ -471,8 +486,10 @@ public partial class NetworkClientWorld : NetworkWorld
         uint bufidx = incomingState.WorldTick % 1024;
         var stateSnapshot = this.LocalPlayerStateSnapshots[bufidx];
 
-        var incomingPosition = incomingLocalPlayerState.GetVar(this.LocalPlayer, "NetworkPosition", Vector3.Zero);
-        var snapshotPosition = stateSnapshot.GetVar(this.LocalPlayer, "NetworkPosition", Vector3.Zero);
+        lp = this.LocalPlayer;
+        if (lp == null) return;
+        var incomingPosition = incomingLocalPlayerState.GetVar(lp, "NetworkPosition", Vector3.Zero);
+        var snapshotPosition = stateSnapshot.GetVar(lp, "NetworkPosition", Vector3.Zero);
 
         var error = incomingPosition - snapshotPosition;
 
@@ -485,7 +502,8 @@ public partial class NetworkClientWorld : NetworkWorld
 
             // Rewind local player state to the correct state from the server.
             // TODO: Cleanup a lot of this when its merged with how rockets are spawned.
-            this.LocalPlayer.ApplyNetworkState(incomingLocalPlayerState);
+            if (lp == null) return;
+            lp.ApplyNetworkState(incomingLocalPlayerState);
 
             // Loop through and replay all captured input snapshots up to the current tick.
             uint replayTick = incomingState.WorldTick;
@@ -496,10 +514,12 @@ public partial class NetworkClientWorld : NetworkWorld
                 var inputSnapshot = this.LocalPlayerInputsSnapshots[bufidx];
 
                 // Rewrite the historical sate snapshot.
-                this.LocalPlayerStateSnapshots[bufidx] = this.LocalPlayer.ToNetworkState();
+                if (lp == null) return;
+                this.LocalPlayerStateSnapshots[bufidx] = lp.ToNetworkState();
 
                 // Apply inputs to the associated player controller and simulate the world.
-                var input = this.LocalPlayer.Components.Get<NetworkInput>();
+                if (lp == null) return;
+                var input = lp.Components.Get<NetworkInput>();
                 input?.SetPlayerInputs(inputSnapshot);
 
                 this.SimulateWorld((float)this.GetPhysicsProcessDeltaTime());
@@ -521,7 +541,7 @@ public partial class NetworkClientWorld : NetworkWorld
 
         if (playerUpdate.State == PlayerConnectionState.Initialized && player.IsInsideTree() && playerUpdate.RequiredComponents != null)
         {
-            foreach (var avaiableComponent in player.Components.All.Where(df => df is IPlayerComponent).Select(df => df as IPlayerComponent))
+            foreach (var avaiableComponent in player.Components.All.OfType<IPlayerComponent>())
             {
                 var channel = avaiableComponent.NetworkId;
                 var enable = playerUpdate.RequiredComponents.Contains(channel);

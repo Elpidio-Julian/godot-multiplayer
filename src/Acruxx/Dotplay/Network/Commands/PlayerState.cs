@@ -1,4 +1,5 @@
 using System;
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Dotplay.Game;
@@ -75,7 +76,7 @@ public struct PlayerState : INetSerializable
     /// <param name="netObject">The net object.</param>
     /// <param name="key">The key.</param>
     /// <returns>An object.</returns>
-    public object GetVar(INetworkObject netObject, string key)
+    public object? GetVar(INetworkObject netObject, string key)
     {
         var checkCollection = new Dictionary<string, NetworkAttribute>();
 
@@ -117,15 +118,15 @@ public struct PlayerState : INetSerializable
     /// <param name="key">The key.</param>
     /// <param name="fallback">The fallback.</param>
     /// <returns>A T.</returns>
-    public T GetVar<T>(INetworkObject netObject, string key, T fallback = default)
+    public T GetVar<T>(INetworkObject netObject, string key, T fallback = default!)
     {
         if (netObject is null)
         {
             return fallback;
         }
 
-        var var = this.GetVar(netObject, key);
-        return var == null ? fallback : var is T t ? t : fallback;
+        var value = this.GetVar(netObject, key);
+        return value == null ? fallback : value is T t ? t : fallback;
     }
 
     /// <inheritdoc />
@@ -155,11 +156,8 @@ public struct PlayerState : INetSerializable
             throw new Exception("Cant be null;");
         }
 
-        var collection = this.NetworkSyncedVars ?? new List<PlayerNetworkVarState>();
-        var checkCollection = new Dictionary<string, NetworkAttribute>();
-
-        collection = this.NetworkSyncedVars;
-        checkCollection = netObject.NetworkSyncVars;
+        var collection = this.NetworkSyncedVars ??= new List<PlayerNetworkVarState>();
+        var checkCollection = netObject.NetworkSyncVars;
 
         if (!checkCollection.ContainsKey(key))
         {
@@ -261,7 +259,7 @@ public struct PlayerState : INetSerializable
     /// <param name="t">The t.</param>
     /// <param name="value">The value.</param>
     /// <returns>An object.</returns>
-    internal static object ParseBytesToAnyType(Type t, byte[] value)
+    internal static object? ParseBytesToAnyType(Type t, byte[] value)
     {
         var reader = new NetDataReader(value);
         if (t.IsEnum)
@@ -308,9 +306,6 @@ public struct PlayerState : INetSerializable
         {
             return reader.GetQuaternion();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 }

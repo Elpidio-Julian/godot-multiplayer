@@ -1,4 +1,5 @@
 using System;
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -79,19 +80,19 @@ public class ComponentRegistry<T> where T : IBaseComponent
 			Logger.LogDebug(this, "An node from this type already exist");
 		}
 
-		return null;
+		return null!;
 	}
 
 	/// <summary>
 	/// Add an new component to base component
 	/// </summary>
 	/// <param name="type">Type of the component which have to be added</param>
-	public Node AddComponent(Type type)
+	public Node? AddComponent(Type type)
 	{
 		var element = Array.Find(this.All, df => df.GetType() == type);
 		if (element == null)
 		{
-			object createdObject = Activator.CreateInstance(type);
+			object? createdObject = Activator.CreateInstance(type);
 			if (createdObject is IChildComponent<T> component && createdObject is Node node)
 			{
 				node.Name = type.Name;
@@ -115,7 +116,7 @@ public class ComponentRegistry<T> where T : IBaseComponent
 	/// </summary>
 	/// <param name="type">Type of the component which have to be added</param>
 	/// <param name="resourcePath">Path to the godot resource</param>
-	public Node AddComponent(Type type, string resourcePath)
+	public Node? AddComponent(Type type, string resourcePath)
 	{
 		var scene = GD.Load<PackedScene>(resourcePath);
 		return this.AddComponent(type, scene);
@@ -126,7 +127,7 @@ public class ComponentRegistry<T> where T : IBaseComponent
 	/// </summary>
 	/// <param name="type"></param>
 	/// <param name="scene"></param>
-	public Node AddComponent(Type type, PackedScene scene)
+	public Node? AddComponent(Type type, PackedScene scene)
 	{
 		var element = Array.Find(this.All, df => df.GetType() == type);
 		if (element == null)
@@ -185,7 +186,7 @@ public class ComponentRegistry<T> where T : IBaseComponent
 	/// <param name="type"></param>
 	/// <param name="resourcePath"></param>
 	/// <param name="callback"></param>
-	public void AddComponentAsync(Type type, string resourcePath, Action<Node> callback)
+	public void AddComponentAsync(Type type, string resourcePath, Action<Node?> callback)
 	{
 		lock (this._onHold)
 		{
@@ -246,19 +247,19 @@ public class ComponentRegistry<T> where T : IBaseComponent
 	/// Get an existing component of the base component
 	/// </summary>
 	/// <typeparam name="T2"></typeparam>
-	public T2 Get<T2>() where T2 : Node, IChildComponent<T>
+	public T2? Get<T2>() where T2 : Node, IChildComponent<T>
 	{
 		var element = Array.Find(this.All, df => df is T2);
-		return element != null ? element as T2 : null;
+		return element as T2;
 	}
 
 	/// <summary>
 	/// Get an existing component of the base component
 	/// </summary>
-	public object Get(Type t)
+	public object? Get(Type t)
 	{
 		var element = Array.Find(this.All, df => df.GetType() == t);
-		return element != null ? element : (object?)null;
+		return element;
 	}
 
 	/// <summary>

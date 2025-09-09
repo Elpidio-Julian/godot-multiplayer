@@ -1,4 +1,5 @@
 using System;
+#nullable enable
 using Dotplay;
 using Dotplay.Game;
 using Godot;
@@ -11,7 +12,7 @@ namespace Acruxx.Client.UI.Ingame;
 public partial class MenuComponent : CanvasLayer, IChildComponent<GameLogic>
 {
     /// <inheritdoc />
-    public GameLogic BaseComponent { get; set; }
+    public required GameLogic BaseComponent { get; set; }
 
     /// <summary>
     /// Gets or sets the close path.

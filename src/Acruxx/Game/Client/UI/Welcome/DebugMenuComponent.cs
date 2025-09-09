@@ -1,4 +1,5 @@
 using System;
+#nullable enable
 using Dotplay;
 using Dotplay.Game;
 using Dotplay.Network;
@@ -21,7 +22,7 @@ public partial class DebugMenuComponent : CanvasLayer, IChildComponent<GameLogic
     private Godot.Timer? _timer;
 
     /// <inheritdoc/>
-    public GameLogic BaseComponent { get; set; }
+    public required GameLogic BaseComponent { get; set; }
 
     /// <summary>
     /// Gets or sets the fps path.

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#nullable enable
 using Dotplay.Network;
 using Dotplay.Network.Commands;
 using Godot;
@@ -63,7 +64,7 @@ public partial class NetworkClientLogic : GameLogic
     /// <param name="port"></param>
     public void Connect(string hostname, int port)
     {
-        if (this.CurrentWorld == null)
+        if (this.CurrentWorld == null && this._netService != null)
         {
             this._netService.Connect(new ClientConnectionSettings
             {
@@ -88,7 +89,7 @@ public partial class NetworkClientLogic : GameLogic
     /// </summary>
     public void Disconnect()
     {
-        this._netService.Disconnect();
+        this._netService?.Disconnect();
         this.DestroyMapInternal();
     }
 
@@ -264,7 +265,7 @@ public partial class NetworkClientLogic : GameLogic
             this._currentWorld?.Destroy();
         }
         this._currentWorld = null;
-        this._loadedWorldName = null;
+        this._loadedWorldName = string.Empty;
 
         this.AfterMapDestroy();
     }
@@ -372,7 +373,7 @@ public partial class NetworkClientLogic : GameLogic
         this._currentWorld = newWorld;
 
         //send server map loading was completed
-        this._netService.SendMessageSerialisable(0, new ServerInitializer());
+        this._netService?.SendMessageSerialisable(0, new ServerInitializer());
         this.AfterMapLoaded();
     }
 

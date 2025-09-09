@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+#nullable enable
 using Dotplay;
 using Dotplay.Game;
 using Dotplay.Game.Client;
@@ -124,7 +125,7 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
     public event DisconnectEvent? OnDisconnect;
 
     /// <inheritdoc/>
-    public GameLogic BaseComponent { get; set; }
+    public required GameLogic BaseComponent { get; set; }
 
     /// <inheritdoc/>
     public override void _Ready()
@@ -264,7 +265,8 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
         button.ItemSelected += index =>
         {
             var meta = button.GetItemMetadata((int)index);
-            ClientSettings.Variables.Set(storeKey, meta.ToString());
+            string metaStr = Convert.ToString(meta) ?? string.Empty;
+            ClientSettings.Variables.Set(storeKey, metaStr);
         };
     }
 
@@ -290,7 +292,7 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
             var name = item.ToString();
             int itemValue = (int)Convert.ChangeType(item, typeof(int));
             button.AddItem(name, itemValue);
-            button.SetItemMetadata(itemValue, name);
+            button.SetItemMetadata(itemValue, name ?? string.Empty);
             if (currentValue == name)
             {
                 selectedId = i;
@@ -302,7 +304,8 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
         button.ItemSelected += index =>
         {
             var meta = button.GetItemMetadata((int)index);
-            ClientSettings.Variables.Set(storeKey, meta.ToString());
+            string metaStr = Convert.ToString(meta) ?? string.Empty;
+            ClientSettings.Variables.Set(storeKey, metaStr);
         };
     }
 

@@ -3,6 +3,7 @@ namespace Acruxx.Player;
 using Acruxx.Camera;
 using Acruxx.Common.StateMachine;
 using Godot;
+#nullable enable
 
 /// <summary>
 /// The player.

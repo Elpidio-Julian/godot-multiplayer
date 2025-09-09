@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+#nullable enable
 using System.Net;
 using System.Net.Sockets;
 using LiteNetLib;

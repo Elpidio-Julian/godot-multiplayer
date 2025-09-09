@@ -1,4 +1,5 @@
 using Dotplay;
+#nullable enable
 using Dotplay.Game;
 using Dotplay.Utils;
 using Godot;
@@ -11,7 +12,7 @@ namespace Acruxx.Client.UI.Welcome;
 public partial class MapLoadingComponent : CanvasLayer, IChildComponent<GameLogic>
 {
 	/// <inheritdoc />
-	public GameLogic BaseComponent { get; set; }
+	public required GameLogic BaseComponent { get; set; }
 
 	/// <summary>
 	/// Gets or sets the path to loading text box.
