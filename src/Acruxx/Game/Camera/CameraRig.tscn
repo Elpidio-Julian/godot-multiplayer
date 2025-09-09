@@ -1,13 +1,13 @@
 [gd_scene load_steps=10 format=3 uid="uid://kglseaca0smk"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/CameraRig.cs" id="1_4aw7c"]
-[ext_resource type="Script" path="res://addons/interpolated_camera_3d/interpolated_camera_3d.gd" id="2_25ymq"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/SpringArm.cs" id="2_65du5"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/AimTarget.cs" id="4_nr3bi"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Common/StateMachine/StateMachine.cs" id="5_41br5"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/States/Camera.cs" id="6_5b7tu"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/States/Default.cs" id="7_psbxa"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Camera/States/Aim.cs" id="8_07xh5"]
+[ext_resource type="Script" uid="uid://ikh5rnr7ymrq" path="res://src/Acruxx/Game/Camera/CameraRig.cs" id="1_4aw7c"]
+[ext_resource type="Script" uid="uid://cwjndjmdpb6xw" path="res://addons/interpolated_camera_3d/interpolated_camera_3d.gd" id="2_25ymq"]
+[ext_resource type="Script" uid="uid://d0io3muas6gu0" path="res://src/Acruxx/Game/Camera/SpringArm.cs" id="2_65du5"]
+[ext_resource type="Script" uid="uid://bph78dcu702pn" path="res://src/Acruxx/Game/Camera/AimTarget.cs" id="4_nr3bi"]
+[ext_resource type="Script" uid="uid://c3td742c4sr6n" path="res://src/Acruxx/Game/Common/StateMachine/StateMachine.cs" id="5_41br5"]
+[ext_resource type="Script" uid="uid://bffqmveet7s8w" path="res://src/Acruxx/Game/Camera/States/Camera.cs" id="6_5b7tu"]
+[ext_resource type="Script" uid="uid://mhjatvass6jk" path="res://src/Acruxx/Game/Camera/States/Default.cs" id="7_psbxa"]
+[ext_resource type="Script" uid="uid://cfptdhmjh8u6u" path="res://src/Acruxx/Game/Camera/States/Aim.cs" id="8_07xh5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8f25k"]
 

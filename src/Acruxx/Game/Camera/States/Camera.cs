@@ -43,7 +43,7 @@ public partial class Camera : CameraState
         //TODO: is there a way to make this better?
 
         var transform = this._cameraRig!.Transform;
-        transform.origin = this._cameraRig.Player!.GlobalTransform.origin + this._cameraRig.PositionStart;
+        transform.Origin = this._cameraRig.Player!.GlobalTransform.Origin + this._cameraRig.PositionStart;
         this._cameraRig.GlobalTransform = transform;
 
         Vector2 lookDirection = GetLookDirection();
@@ -61,8 +61,8 @@ public partial class Camera : CameraState
         }
 
         bool isMovingTowardsCamera =
-            (moveDirection.x >= -this.DeadZoneBackwards) &&
-            (moveDirection.x <= this.DeadZoneBackwards);
+            (moveDirection.X >= -this.DeadZoneBackwards) &&
+            (moveDirection.X <= this.DeadZoneBackwards);
 
         if (!isMovingTowardsCamera && !this.IsAiming)
         {
@@ -71,7 +71,7 @@ public partial class Camera : CameraState
 
         // prevent winding
         var rot = this._cameraRig.Rotation;
-        rot.y = Mathf.Wrap(this._cameraRig.Rotation.y, -Mathf.Pi, Mathf.Pi);
+        rot.Y = Mathf.Wrap(this._cameraRig.Rotation.Y, -Mathf.Pi, Mathf.Pi);
         this._cameraRig.Rotation = rot;
     }
 
@@ -122,10 +122,10 @@ public partial class Camera : CameraState
     /// </summary>
     private void AutoRotate()
     {
-        float offset = this._cameraRig!.Player!.Rotation.y - this._cameraRig.Rotation.y;
+        float offset = this._cameraRig!.Player!.Rotation.Y - this._cameraRig.Rotation.Y;
         float targetAngle = this.CalculateTargetAngle(offset);
         var rot = this._cameraRig.Rotation;
-        rot.y = Mathf.Lerp(rot.y, targetAngle, 0.015f);
+        rot.Y = Mathf.Lerp(rot.Y, targetAngle, 0.015f);
         this._cameraRig.Rotation = rot;
     }
 
@@ -137,8 +137,8 @@ public partial class Camera : CameraState
     private float CalculateTargetAngle(float offset)
     {
         return offset > Mathf.Pi
-            ? this._cameraRig!.Player!.Rotation.y - (2 * Mathf.Pi)
-            : offset < -Mathf.Pi ? this._cameraRig!.Player!.Rotation.y + (2 * Mathf.Pi) : this._cameraRig!.Player!.Rotation.y;
+            ? this._cameraRig!.Player!.Rotation.Y - (2 * Mathf.Pi)
+            : offset < -Mathf.Pi ? this._cameraRig!.Player!.Rotation.Y + (2 * Mathf.Pi) : this._cameraRig!.Player!.Rotation.Y;
     }
 
     /// <summary>
@@ -149,19 +149,19 @@ public partial class Camera : CameraState
     {
         // left right rotation
         var rot = this._cameraRig!.Rotation;
-        rot.y -= offset.x;
+        rot.Y -= offset.X;
         this._cameraRig!.Rotation = rot;
 
         // up down rotation
-        rot.x += (this.IsYInverted ? (offset.y * -1.0f) : offset.y);
+        rot.X += (this.IsYInverted ? (offset.Y * -1.0f) : offset.Y);
         this._cameraRig!.Rotation = rot;
 
         // limit camera rotation
-        rot.x = Mathf.Clamp(rot.x, -0.75f, 1.25f);
+        rot.X = Mathf.Clamp(rot.X, -0.75f, 1.25f);
         this._cameraRig!.Rotation = rot;
 
         // not z rotation
-        rot.z = 0.0f;
+        rot.Z = 0.0f;
         this._cameraRig!.Rotation = rot;
     }
 }

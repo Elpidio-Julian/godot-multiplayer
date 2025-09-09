@@ -32,17 +32,17 @@ public partial class InterpolatedCamera3D2 : Camera3D
 
         var localTransformOnlyOrigin = new Transform3D(
             Basis.Identity,
-            this.Transform.origin);
+            this.Transform.Origin);
         var localTransformOnlyBasic = new Transform3D(
-            this.Transform.basis,
+            this.Transform.Basis,
             Vector3.Zero);
 
         localTransformOnlyOrigin = localTransformOnlyOrigin.InterpolateWith(target_xform, (float)translateFactor);
         localTransformOnlyBasic = localTransformOnlyBasic.InterpolateWith(target_xform, (float)rotateFactor);
 
         this.GlobalTransform = new Transform3D(
-            localTransformOnlyBasic.basis,
-            localTransformOnlyOrigin.origin);
+            localTransformOnlyBasic.Basis,
+            localTransformOnlyOrigin.Origin);
     }
 
     /// <inheritdoc />

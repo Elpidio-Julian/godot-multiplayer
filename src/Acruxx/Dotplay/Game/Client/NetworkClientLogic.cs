@@ -29,8 +29,8 @@ public partial class NetworkClientLogic : GameLogic
        { "cl_draw_shadow", "SoftMedium"},
 
        { "cl_window_mode", nameof(ClientSettings.WindowModes.Windowed)},
-       { "cl_draw_msaa", nameof(MSAA.Msaa4x)},
-       { "cl_draw_aa", nameof(ScreenSpaceAA.Disabled)},
+       { "cl_draw_msaa", "Msaa4x"},
+       { "cl_draw_aa", "Disabled"},
        { "cl_draw_debug",  nameof(DebugDrawEnum.Disabled)},
 
        { "cl_draw_glow", "false"},
@@ -112,9 +112,18 @@ public partial class NetworkClientLogic : GameLogic
     /// <param name="debug">The debug.</param>
     internal void ApplyAA(string debug)
     {
-        if (Enum.TryParse(debug, true, out ScreenSpaceAA result))
+        var prop = typeof(SubViewport).GetProperty("ScreenSpaceAA");
+        if (prop != null && prop.PropertyType.IsEnum)
         {
-            this.ScreenSpaceAa = result;
+            try
+            {
+                var val = Enum.Parse(prop.PropertyType, debug, true);
+                prop.SetValue(this, val);
+            }
+            catch
+            {
+                // ignore invalid value
+            }
         }
     }
 
@@ -145,9 +154,18 @@ public partial class NetworkClientLogic : GameLogic
     /// <param name="debug">The debug.</param>
     internal void ApplyMSAA(string debug)
     {
-        if (Enum.TryParse(debug, true, out MSAA result))
+        var prop = typeof(SubViewport).GetProperty("Msaa3D");
+        if (prop != null && prop.PropertyType.IsEnum)
         {
-            this.Msaa3d = result;
+            try
+            {
+                var val = Enum.Parse(prop.PropertyType, debug, true);
+                prop.SetValue(this, val);
+            }
+            catch
+            {
+                // ignore invalid value
+            }
         }
     }
 
@@ -169,7 +187,7 @@ public partial class NetworkClientLogic : GameLogic
         if (ClientSettings.Resolutions.Contains(resolution))
         {
             var values = resolution.Split("x");
-            var res = new Vector2i(int.Parse(values[0]), int.Parse(values[1]));
+            var res = new Vector2I(int.Parse(values[0]), int.Parse(values[1]));
 
             DisplayServer.WindowSetSize(res);
             this.GetTree().Root.ContentScaleSize = res;
@@ -317,7 +335,7 @@ public partial class NetworkClientLogic : GameLogic
             }
         };
 
-        this.AudioListenerEnable3d = true;
+        this.AudioListenerEnable3D = true;
 
         this._netService = this.Services.Create<ClientNetworkService>();
         this._netService.OnDisconnect += this.OnInternalDisconnect;

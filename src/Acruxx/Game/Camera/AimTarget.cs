@@ -31,10 +31,10 @@ public partial class AimTarget : Sprite3D
             Vector3 collisionNormal = ray.GetCollisionNormal();
 
             var transform = this.GlobalTransform;
-            transform.origin = collisionPoint + (collisionNormal * 0.01f);
+            transform.Origin = collisionPoint + (collisionNormal * 0.01f);
             this.GlobalTransform = transform;
 
-            this.LookAt(collisionPoint - collisionNormal, this.GlobalTransform.basis.y.Normalized());
+            this.LookAt(collisionPoint - collisionNormal, this.GlobalTransform.Basis.Y.Normalized());
         }
     }
 }

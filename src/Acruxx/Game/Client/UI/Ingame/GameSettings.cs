@@ -163,8 +163,8 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
         this.InitResolutions();
 
         InitEnums<ClientSettings.WindowModes>(this._windowModeChanger!, "cl_window_mode");
-        InitEnums<Viewport.MSAA>(this._msaaChanger!, "cl_draw_msaa");
-        InitEnums<Viewport.ScreenSpaceAA>(this._aaChanger!, "cl_draw_aa");
+        InitEnumsFromProperty(this._msaaChanger!, "cl_draw_msaa", "Msaa3D");
+        InitEnumsFromProperty(this._aaChanger!, "cl_draw_aa", "ScreenSpaceAA");
         InitEnums<Viewport.DebugDrawEnum>(this._debugChanger!, "cl_draw_debug");
         InitEnums<RenderingServer.ShadowQuality>(this._shadowQuality!, "cl_draw_shadow");
 
@@ -257,6 +257,44 @@ public partial class GameSettings : CanvasLayer, IChildComponent<GameLogic>
                 selectedId = i;
             }
 
+            i++;
+        }
+
+        button.Selected = selectedId;
+        button.ItemSelected += index =>
+        {
+            var meta = button.GetItemMetadata((int)index);
+            ClientSettings.Variables.Set(storeKey, meta.ToString());
+        };
+    }
+
+    /// <summary>
+    /// Initializes an OptionButton with values from a SubViewport enum property by name (e.g., "Msaa3D", "ScreenSpaceAA").
+    /// This avoids compile-time dependency on engine enum nesting differences between minor versions.
+    /// </summary>
+    private static void InitEnumsFromProperty(OptionButton button, string storeKey, string subViewportPropertyName)
+    {
+        var prop = typeof(SubViewport).GetProperty(subViewportPropertyName);
+        if (prop == null || !prop.PropertyType.IsEnum)
+        {
+            return;
+        }
+
+        var enumType = prop.PropertyType;
+        var currentValue = ClientSettings.Variables.GetValue(storeKey);
+
+        int i = 0;
+        int selectedId = 0;
+        foreach (var item in Enum.GetValues(enumType))
+        {
+            var name = item.ToString();
+            int itemValue = (int)Convert.ChangeType(item, typeof(int));
+            button.AddItem(name, itemValue);
+            button.SetItemMetadata(itemValue, name);
+            if (currentValue == name)
+            {
+                selectedId = i;
+            }
             i++;
         }
 

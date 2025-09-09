@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b31v0bkjviv01"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Welcome/DebugMenuComponent.cs" id="1_22dkm"]
+[ext_resource type="Script" uid="uid://bkaqiojsspdwj" path="res://src/Acruxx/Game/Client/UI/Welcome/DebugMenuComponent.cs" id="1_22dkm"]
 
 [sub_resource type="Theme" id="Theme_15dj5"]
 default_font_size = 10

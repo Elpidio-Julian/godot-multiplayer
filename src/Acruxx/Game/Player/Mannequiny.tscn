@@ -1,7 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://wncpmqpndmj2"]
+[gd_scene load_steps=19 format=3 uid="uid://wncpmqpndmj2"]
 
-[ext_resource type="PackedScene" uid="uid://dmohaboowxflx" path="res://assets/models/mannequin/mannequiny.glb" id="1_mdrau"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Player/Mannequiny.cs" id="2_pprt4"]
+[ext_resource type="Script" uid="uid://da1saoqrttn0j" path="res://src/Acruxx/Game/Player/Mannequiny.cs" id="2_pprt4"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wsm34"]
 animation = &"idle"
@@ -66,7 +65,7 @@ graph_offset = Vector2(46, 15)
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_rbbyr"]
 
-[node name="Mannequiny" instance=ExtResource("1_mdrau")]
+[node name="Mannequiny"]
 script = ExtResource("2_pprt4")
 
 [node name="root" parent="." index="0"]

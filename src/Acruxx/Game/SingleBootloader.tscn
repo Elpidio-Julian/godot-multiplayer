@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dn3knrr1huqlb"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/SingleBootloader.cs" id="1_umwpl"]
+[ext_resource type="Script" uid="uid://bfp0xs2a6c38l" path="res://src/Acruxx/Game/SingleBootloader.cs" id="1_umwpl"]
 
 [node name="SingleBootloader" type="Node"]
 process_mode = 3

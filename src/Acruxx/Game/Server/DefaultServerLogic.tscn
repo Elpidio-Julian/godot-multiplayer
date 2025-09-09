@@ -1,8 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://1sk3fv3m5vwh"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Server/DefaultServerLogic.cs" id="1_22mtf"]
+[ext_resource type="Script" uid="uid://bshkwv0p572fw" path="res://src/Acruxx/Game/Server/DefaultServerLogic.cs" id="1_22mtf"]
 
 [node name="NetworkServerLogic" type="SubViewport"]
 disable_3d = true
 script = ExtResource("1_22mtf")
+DefaultMap = "uid://cnwhiwkp45dcu"
 MaxConnections = 8

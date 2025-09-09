@@ -50,7 +50,7 @@ public class PlaygroundGameRule : GameRule
     /// <param name="player">The player.</param>
     private void AddPlayerWithSlot(SpawnPoint spawnPoint, INetworkCharacter player)
     {
-        var origin = spawnPoint.GlobalTransform.origin;
+        var origin = spawnPoint.GlobalTransform.Origin;
 
         Logger.LogDebug(this, "Player was joined to " + origin.ToString());
 

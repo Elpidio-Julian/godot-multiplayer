@@ -82,11 +82,11 @@ public partial class CharacterCamera : Camera3D, IPlayerComponent
     {
         base._EnterTree();
 
-        var rotation = this.GlobalTransform.basis.GetEuler();
+        var rotation = this.GlobalTransform.Basis.GetEuler();
 
-        this.TempRotX = rotation.x;
-        this.TempRotY = rotation.y;
-        this.TempRotZ = rotation.z;
+        this.TempRotX = rotation.X;
+        this.TempRotY = rotation.Y;
+        this.TempRotZ = rotation.Z;
 
         this.Current = this.IsEnabled;
         this.TopLevel = true;
@@ -118,30 +118,31 @@ public partial class CharacterCamera : Camera3D, IPlayerComponent
         if (this.IsServer())
         {
             var transform = this.BaseComponent.GlobalTransform;
-            var targetPos = this.BaseComponent.GlobalTransform.origin + this.FPSCameraOffset + Vector3.Up * this.BaseComponent.GetShapeHeight();
-            transform.origin = targetPos;
-            transform.basis = new Basis(new Vector3(this.BaseComponent.CurrentPlayerInput.Inputs.ViewDirection.x, transform.basis.GetEuler().y, transform.basis.GetEuler().z));
+            var targetPos = this.BaseComponent.GlobalTransform.Origin + this.FPSCameraOffset + Vector3.Up * this.BaseComponent.GetShapeHeight();
+            transform.Origin = targetPos;
+            var e = transform.Basis.GetEuler();
+            transform.Basis = Basis.FromEuler(new Vector3(this.BaseComponent.CurrentPlayerInput.Inputs.ViewDirection.X, e.Y, e.Z));
             this.GlobalTransform = transform;
         }
         else if (this.Mode == CameraMode.TPS)
         {
-            var cam_pos = this.BaseComponent.GlobalTransform.origin + this.TPSCameraOffset;
+            var cam_pos = this.BaseComponent.GlobalTransform.Origin + this.TPSCameraOffset;
             if (!this.IsServer())
             {
-                cam_pos.x += this.TPSCameraRadius * Mathf.Sin(Mathf.DegToRad(this.TempYaw)) * Mathf.Cos(Mathf.DegToRad(this.TempPitch));
-                cam_pos.y += this.TPSCameraRadius * Mathf.Sin(Mathf.DegToRad(this.TempPitch));
-                cam_pos.z += this.TPSCameraRadius * Mathf.Cos(Mathf.DegToRad(this.TempYaw)) * Mathf.Cos(Mathf.DegToRad(this.TempPitch));
+                cam_pos.X += this.TPSCameraRadius * Mathf.Sin(Mathf.DegToRad(this.TempYaw)) * Mathf.Cos(Mathf.DegToRad(this.TempPitch));
+                cam_pos.Y += this.TPSCameraRadius * Mathf.Sin(Mathf.DegToRad(this.TempPitch));
+                cam_pos.Z += this.TPSCameraRadius * Mathf.Cos(Mathf.DegToRad(this.TempYaw)) * Mathf.Cos(Mathf.DegToRad(this.TempPitch));
 
-                this.LookAtFromPosition(cam_pos, this.BaseComponent.GlobalTransform.origin + this.TPSCameraOffset, new Vector3(0, 1, 0));
+                this.LookAtFromPosition(cam_pos, this.BaseComponent.GlobalTransform.Origin + this.TPSCameraOffset, new Vector3(0, 1, 0));
             }
         }
         else if (this.Mode == CameraMode.FPS)
         {
             var transform = this.BaseComponent.GlobalTransform;
 
-            var target = this.BaseComponent.GlobalTransform.origin + this.FPSCameraOffset + Vector3.Up * this.BaseComponent.GetShapeHeight();
-            transform.origin = target;
-            transform.basis = new Basis(new Vector3(this.TempRotX, this.TempRotY, 0));
+            var target = this.BaseComponent.GlobalTransform.Origin + this.FPSCameraOffset + Vector3.Up * this.BaseComponent.GetShapeHeight();
+            transform.Origin = target;
+            transform.Basis = Basis.FromEuler(new Vector3(this.TempRotX, this.TempRotY, 0));
             this.GlobalTransform = transform;
         }
 
@@ -156,7 +157,7 @@ public partial class CharacterCamera : Camera3D, IPlayerComponent
     /// </summary>
     public virtual Vector3 GetViewRotation()
     {
-        return this.GlobalTransform.basis.GetEuler();
+        return this.GlobalTransform.Basis.GetEuler();
     }
 
     /// <summary>
@@ -184,12 +185,12 @@ public partial class CharacterCamera : Camera3D, IPlayerComponent
                 if (Godot.Input.MouseMode == Godot.Input.MouseModeEnum.Captured)
                 {
                     var ev = @event as InputEventMouseMotion;
-                    this.TempRotX -= ev.Relative.y * (sensY / 100);
+                    this.TempRotX -= ev.Relative.Y * (sensY / 100);
                     this.TempRotX = Mathf.Clamp(this.TempRotX, Mathf.DegToRad(-90), Mathf.DegToRad(90));
-                    this.TempRotY -= ev.Relative.x * (sensX / 100);
+                    this.TempRotY -= ev.Relative.X * (sensX / 100);
 
-                    this.TempYaw = (this.TempYaw - (ev.Relative.x * (sensX))) % 360;
-                    this.TempPitch = Mathf.Max(Mathf.Min(this.TempPitch + (ev.Relative.y * (sensY)), 85), -85);
+                    this.TempYaw = (this.TempYaw - (ev.Relative.X * (sensX))) % 360;
+                    this.TempPitch = Mathf.Max(Mathf.Min(this.TempPitch + (ev.Relative.Y * (sensY)), 85), -85);
                 }
             }
 

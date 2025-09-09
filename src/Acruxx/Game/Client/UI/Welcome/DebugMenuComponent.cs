@@ -18,7 +18,7 @@ public partial class DebugMenuComponent : CanvasLayer, IChildComponent<GameLogic
     private Label? _packageLosse;
     private Label? _physicsTime;
     private Label? _ping;
-    private Timer? _timer;
+    private Godot.Timer? _timer;
 
     /// <inheritdoc/>
     public GameLogic BaseComponent { get; set; }
@@ -86,7 +86,7 @@ public partial class DebugMenuComponent : CanvasLayer, IChildComponent<GameLogic
         this._idleTime = this.GetNode<Label>(this.IdleTimePath);
         this._physicsTime = this.GetNode<Label>(this.PhysicsTimePath);
 
-        this._timer = this.GetNode<Timer>(this.TimerPath);
+        this._timer = this.GetNode<Godot.Timer>(this.TimerPath);
     }
 
     /// <inheritdoc/>

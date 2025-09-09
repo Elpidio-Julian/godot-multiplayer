@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dvb4pro8ciqhu"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Welcome/MapLoadingComponent.cs" id="1_u0lc0"]
+[ext_resource type="Script" uid="uid://s61hn6lx0hgh" path="res://src/Acruxx/Game/Client/UI/Welcome/MapLoadingComponent.cs" id="1_u0lc0"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_u0lc0")

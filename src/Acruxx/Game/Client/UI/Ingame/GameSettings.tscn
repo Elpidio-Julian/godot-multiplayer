@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bq6o3of6g5ef3"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Ingame/GameSettings.cs" id="1_58hji"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Ingame/KeyConfirmationDialog.cs" id="2_f8c0r"]
+[ext_resource type="Script" uid="uid://bbxkq43c55o7h" path="res://src/Acruxx/Game/Client/UI/Ingame/GameSettings.cs" id="1_58hji"]
+[ext_resource type="Script" uid="uid://5xqlgaso41hp" path="res://src/Acruxx/Game/Client/UI/Ingame/KeyConfirmationDialog.cs" id="2_f8c0r"]
 
 [node name="GameSettings" type="CanvasLayer"]
 script = ExtResource("1_58hji")

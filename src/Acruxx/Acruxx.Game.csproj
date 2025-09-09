@@ -1,0 +1,24 @@
+<Project Sdk="Godot.NET.Sdk/4.4.1">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <GodotProjectDir>$(MSBuildThisFileDirectory)../../</GodotProjectDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LiteNetLib\LiteNetLib.csproj" />
+    <ProjectReference Include="..\PriorityQueue\PriorityQueue.csproj" />
+    <ProjectReference Include="..\RCON\RCON.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove=".godot/**" />
+    <Compile Remove="**/.godot/**" />
+  </ItemGroup>
+
+</Project>
+

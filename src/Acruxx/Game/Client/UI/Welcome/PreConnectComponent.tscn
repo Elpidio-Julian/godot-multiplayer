@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://tvj80hyoj7al"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Welcome/PreConnectComponent.cs" id="1_rioq5"]
+[ext_resource type="Script" uid="uid://dh4wof2rgftvc" path="res://src/Acruxx/Game/Client/UI/Welcome/PreConnectComponent.cs" id="1_rioq5"]
 [ext_resource type="Shader" uid="uid://dsuparnsb0w6f" path="res://src/Acruxx/Game/Client/UI/Welcome/PreConnectComponent.tres" id="2_mljow"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_43hdw"]

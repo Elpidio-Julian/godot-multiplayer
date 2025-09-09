@@ -174,7 +174,7 @@ public class DefaultMovementProcessor : IMovementProcessor
     public virtual float GetMovementSpeedFactor()
     {
         var vel = this.Velocity;
-        vel.y = 0;
+        vel.Y = 0;
         return vel.Length().SafeDivision(this.GetWalkingSpeed());
     }
 
@@ -221,7 +221,7 @@ public class DefaultMovementProcessor : IMovementProcessor
 
         //Set rotation
         var comp = this._component.Transform;
-        comp.basis = new Basis(new Vector3(0, inputs.ViewDirection.y, 0));
+        comp.Basis = Basis.FromEuler(new Vector3(0, inputs.ViewDirection.Y, 0));
         this._component.Transform = comp;
 
         // Process movement.
@@ -248,10 +248,10 @@ public class DefaultMovementProcessor : IMovementProcessor
         component.Move(this.Velocity);
 
         // HACK: Reset to zero when falling off the edge for now.
-        if (this._component.GlobalTransform.origin.y < -100)
+        if (this._component.GlobalTransform.Origin.Y < -100)
         {
             var gt = this._component.GlobalTransform;
-            gt.origin = Vector3.Zero;
+            gt.Origin = Vector3.Zero;
             this._component.GlobalTransform = gt;
             this._component.Velocity = Vector3.Zero;
             this.Velocity = Vector3.Zero;
@@ -286,8 +286,8 @@ public class DefaultMovementProcessor : IMovementProcessor
             accelspeed = addspeed;
         }
 
-        velocity.x += accelspeed * wishdir.x;
-        velocity.z += accelspeed * wishdir.z;
+        velocity.X += accelspeed * wishdir.X;
+        velocity.Z += accelspeed * wishdir.Z;
 
         return velocity;
     }
@@ -308,8 +308,8 @@ public class DefaultMovementProcessor : IMovementProcessor
             return velocity;
         }
 
-        var zspeed = velocity.y;
-        velocity.y = 0;
+        var zspeed = velocity.Y;
+        velocity.Y = 0;
 
         /* Next two lines are equivalent to idTech's VectorNormalize() */
         var speed = velocity.Length();
@@ -322,16 +322,16 @@ public class DefaultMovementProcessor : IMovementProcessor
         // Change direction while slowing down
         if (dot > 0)
         {
-            velocity.x = (velocity.x * speed) + (wishdir.x * k);
-            velocity.y = (velocity.y * speed) + (wishdir.y * k);
-            velocity.z = (velocity.z * speed) + (wishdir.z * k);
+            velocity.X = (velocity.X * speed) + (wishdir.X * k);
+            velocity.Y = (velocity.Y * speed) + (wishdir.Y * k);
+            velocity.Z = (velocity.Z * speed) + (wishdir.Z * k);
 
             velocity = velocity.Normalized();
         }
 
-        velocity.x *= speed;
-        velocity.y = zspeed; // Note this line
-        velocity.z *= speed;
+        velocity.X *= speed;
+        velocity.Y = zspeed; // Note this line
+        velocity.Z *= speed;
 
         return velocity;
     }
@@ -339,8 +339,8 @@ public class DefaultMovementProcessor : IMovementProcessor
     /// <inheritdoc />
     internal Vector3 AirMove(float dt, Vector3 velocity)
     {
-        var wishdir = this._component.GlobalTransform.basis.x * this.LeftRightAxis;
-        wishdir += this._component.GlobalTransform.basis.z * this.ForwardBackwardAxis;
+        var wishdir = this._component.GlobalTransform.Basis.X * this.LeftRightAxis;
+        wishdir += this._component.GlobalTransform.Basis.Z * this.ForwardBackwardAxis;
 
         float wishspeed = wishdir.Length();
         wishspeed *= this.GetMovementSpeed();
@@ -375,7 +375,7 @@ public class DefaultMovementProcessor : IMovementProcessor
             velocity = this.AirControl(velocity, wishdir, this._wishspeed2, dt);
         }
 
-        velocity.y -= this.GetGravity() * dt;
+        velocity.Y -= this.GetGravity() * dt;
 
         return velocity;
     }
@@ -396,7 +396,7 @@ public class DefaultMovementProcessor : IMovementProcessor
         float control;
         float drop;
 
-        vec.y = 0.0f;
+        vec.Y = 0.0f;
         speed = vec.Length();
         drop = 0.0f;
 
@@ -415,13 +415,13 @@ public class DefaultMovementProcessor : IMovementProcessor
             newspeed /= speed;
         }
 
-        velocity.x *= newspeed;
+        velocity.X *= newspeed;
         if (yAffected)
         {
-            velocity.y *= newspeed;
+            velocity.Y *= newspeed;
         }
 
-        velocity.z *= newspeed;
+        velocity.Z *= newspeed;
 
         return velocity;
     }
@@ -437,8 +437,8 @@ public class DefaultMovementProcessor : IMovementProcessor
         // Do not apply friction if the player is queueing up the next jump
         velocity = !this._wishJump ? this.ApplyFriction(velocity, 1.0f, dt) : this.ApplyFriction(velocity, 0, dt);
 
-        var wishdir = this._component.GlobalTransform.basis.x * this.LeftRightAxis;
-        wishdir += this._component.GlobalTransform.basis.z * this.ForwardBackwardAxis;
+        var wishdir = this._component.GlobalTransform.Basis.X * this.LeftRightAxis;
+        wishdir += this._component.GlobalTransform.Basis.Z * this.ForwardBackwardAxis;
         wishdir = wishdir.Normalized();
 
         var wishspeed = wishdir.Length();
@@ -447,11 +447,11 @@ public class DefaultMovementProcessor : IMovementProcessor
         velocity = Accelerate(velocity, wishdir, wishspeed, this.GetGroundAccelerationFactor(), dt);
 
         // Reset the gravity velocity
-        velocity.y = -this.GetGravity() * dt;
+        velocity.Y = -this.GetGravity() * dt;
 
         if (this._wishJump)
         {
-            velocity.y = this._serverVars.Get("sv_jumpspeed", 8f);
+            velocity.Y = this._serverVars.Get("sv_jumpspeed", 8f);
             this._wishJump = false;
         }
 

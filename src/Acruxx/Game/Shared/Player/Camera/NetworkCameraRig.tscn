@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bj7irb66o6jji"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Dotplay/Game/CharacterCamera.cs" id="1_ckmk1"]
+[ext_resource type="Script" uid="uid://bncmor12035bo" path="res://src/Acruxx/Dotplay/Game/CharacterCamera.cs" id="1_ckmk1"]
 
 [node name="NetworkCameraRig" type="Node3D"]
 

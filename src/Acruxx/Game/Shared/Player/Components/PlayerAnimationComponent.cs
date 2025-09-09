@@ -107,7 +107,7 @@ public partial class PlayerAnimationComponent : Node, IPlayerComponent
         {
             if (blendPosition.Length() > 0.001)
             {
-                this._animationPlayer.PlaybackSpeed = factor + 1f;
+                this._animationPlayer.SpeedScale = factor + 1f;
                 this.TransitionTo(AnimationStates.RUN);
             }
             else

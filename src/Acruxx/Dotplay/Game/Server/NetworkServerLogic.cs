@@ -83,7 +83,7 @@ public partial class NetworkServerLogic : GameLogic
     /// </summary>
     public NetworkServerLogic()
     {
-        this.Disable3d = !this.CanBeVisible;
+        this.Disable3D = !this.CanBeVisible;
     }
 
     /// <summary>

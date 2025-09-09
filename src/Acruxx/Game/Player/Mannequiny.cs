@@ -69,7 +69,7 @@ public partial class Mannequiny : Node3D
     public void SetPlaybackSpeed(float speed)
     {
         this._playbackSpeed = speed;
-        this._animationPlayer!.PlaybackSpeed = speed;
+        this._animationPlayer!.SpeedScale = speed;
     }
 
     /// <summary>

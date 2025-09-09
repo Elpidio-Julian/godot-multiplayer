@@ -17,7 +17,7 @@ public partial class NetworkLevel : Node3D, INetworkLevel
     /// <summary>
     /// The world environment of the levelk
     /// </summary>
-    public Environment Environment
+    public Godot.Environment Environment
     {
         get
         {

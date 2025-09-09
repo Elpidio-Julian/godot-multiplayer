@@ -27,17 +27,25 @@ public partial class GameLogic : SubViewport, IGameLogic
     /// </summary>
     public GameLogic()
     {
-        Process.GetCurrentProcess().PriorityBoostEnabled = true;
-        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+        try
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                Process.GetCurrentProcess().PriorityBoostEnabled = true;
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+            }
+        }
+        catch (Exception ex)
+        {
+            GD.PushWarning($"Skipping process priority tuning: {ex.GetType().Name}: {ex.Message}");
+        }
 
-        // Of course this only affects the main thread rather than child threads.
-        System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
-
-        this.OwnWorld3d = true;
+        this.OwnWorld3D = true;
         this.RenderTargetUpdateMode = UpdateMode.Always;
         this.RenderTargetClearMode = ClearMode.Always;
         this.ProcessMode = ProcessModeEnum.Always;
-        this.Scaling3dMode = Scaling3DMode.Fsr;
+        this.Scaling3DMode = Scaling3DModeEnum.Fsr;
 
         this.Components = new ComponentRegistry<GameLogic>(this);
 
@@ -150,7 +158,7 @@ public partial class GameLogic : SubViewport, IGameLogic
         {
             parent.ProcessMode = ProcessModeEnum.Always;
             Logger.LogDebug(this, "Found parent set size: " + parent.Size);
-            this.Size = new Vector2i((int)parent.Size.x, (int)parent.Size.y);
+            this.Size = new Vector2I((int)parent.Size.X, (int)parent.Size.Y);
         }
 
         Logger.LogDebug(this, "Service amount: " + this.Services.All.Length);

@@ -22,8 +22,8 @@ public partial class SpringArm : SpringArm3D
         get { return this._lengthRange; }
         set
         {
-            this._lengthRange.x = value.x;
-            this._lengthRange.y = value.y;
+            this._lengthRange.X = value.X;
+            this._lengthRange.Y = value.Y;
 
             // set zoom again
             this.Zoom = this._zoom;
@@ -41,7 +41,7 @@ public partial class SpringArm : SpringArm3D
         {
             Debug.Assert((value >= 0.0) && (value <= 1.0f));
             this._zoom = value;
-            this.SpringLength = this._lengthRange.y + this._lengthRange.x - Mathf.Lerp(this._lengthRange.x, this._lengthRange.y, this._zoom);
+            this.SpringLength = this._lengthRange.Y + this._lengthRange.X - Mathf.Lerp(this._lengthRange.X, this._lengthRange.Y, this._zoom);
         }
     }
 

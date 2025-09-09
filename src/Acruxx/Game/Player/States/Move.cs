@@ -52,8 +52,8 @@ public partial class Move : PlayerState
         Vector3 inputDirection = GetInputDirection();
 
         // only forward direction if player trying to move forward or right
-        Vector3 forwards = this._player!.Camera!.GlobalTransform.basis.z * inputDirection.z;
-        Vector3 right = this._player.Camera.GlobalTransform.basis.x * inputDirection.x;
+        Vector3 forwards = this._player!.Camera!.GlobalTransform.Basis.Z * inputDirection.Z;
+        Vector3 right = this._player.Camera.GlobalTransform.Basis.X * inputDirection.X;
 
         // Get Move Direction relative to the camera
         this.MoveDirection = forwards + right;
@@ -62,14 +62,14 @@ public partial class Move : PlayerState
             this.MoveDirection = this.MoveDirection.Normalized();
         }
 
-        this.MoveDirection.y = 0.0f;
+        this.MoveDirection.Y = 0.0f;
         this._skin!.SetMoveDirection(this.MoveDirection);
 
         // check if player hits key and rotate
         if (this.MoveDirection.Length() > 0.001)
         {
-            var targetDirection = this._player.Transform.LookingAt(this._player.GlobalTransform.origin + this.MoveDirection, Vector3.Up);
-            this._player.Transform = this._player.Transform.SphericalInterpolateWith(targetDirection, this._rotationSpeedFactor * (float)delta);
+            var targetDirection = this._player.Transform.LookingAt(this._player.GlobalTransform.Origin + this.MoveDirection, Vector3.Up);
+            this._player.Transform = this._player.Transform.InterpolateWith(targetDirection, this._rotationSpeedFactor * (float)delta);
         }
 
         // move character
@@ -109,7 +109,7 @@ public partial class Move : PlayerState
         }
 
         // override because start value is 0.0f
-        velocityNew.y = velocityCurrent.y + (this._gravity * delta);
+        velocityNew.Y = velocityCurrent.Y + (this._gravity * delta);
 
         return velocityNew;
     }

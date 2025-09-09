@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Godot;
 
 namespace Acruxx;
@@ -8,20 +8,20 @@ namespace Acruxx;
 /// </summary>
 public partial class Bootloader : Node
 {
-    [Export(PropertyHint.File, "*.tscn")]
-    public string? ClientLogicScenePath;
+	[Export(PropertyHint.File, "*.tscn")]
+	public string? ClientLogicScenePath;
 
-    [Export(PropertyHint.File, "*.tscn")]
-    public string? ServerLogicScenePath;
+	[Export(PropertyHint.File, "*.tscn")]
+	public string? ServerLogicScenePath;
 
-    /// <inheritdoc />
-    public override void _EnterTree()
-    {
-        if (this.ServerLogicScenePath is null || this.ClientLogicScenePath is null)
-        {
-            throw new Exception("ClientLogicScenePath or ServerLogicScenePath is null");
-        }
+	/// <inheritdoc />
+	public override void _EnterTree()
+	{
+		if (this.ServerLogicScenePath is null || this.ClientLogicScenePath is null)
+		{
+			throw new Exception("ClientLogicScenePath or ServerLogicScenePath is null");
+		}
 
-        base._EnterTree();
-    }
+		base._EnterTree();
+	}
 }

@@ -15,7 +15,6 @@ public static class VariantExtensions
     /// <returns>A Variant.</returns>
     public static Variant CreateFromObject(object value)
     {
-        var v = Marshaling.ConvertManagedObjectToVariant(value);
-        return Variant.CreateTakingOwnershipOfDisposableValue(v);
+        return Variant.From(value);
     }
 }

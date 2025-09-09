@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://djxqrvidh8i50"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Client/UI/Ingame/GameKeyRecord.cs" id="1_bja4y"]
+[ext_resource type="Script" uid="uid://dq4i676oy5pf1" path="res://src/Acruxx/Game/Client/UI/Ingame/GameKeyRecord.cs" id="1_bja4y"]
 
 [node name="MovementControl" type="HBoxContainer"]
 anchors_preset = 10

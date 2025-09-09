@@ -64,10 +64,7 @@ public static class NetExtensions
     /// <returns>A Vector2.</returns>
     public static Vector2 DeserializeVector2(NetDataReader reader)
     {
-        Vector2 v;
-        v.x = reader.GetFloat();
-        v.y = reader.GetFloat();
-        return v;
+        return new Vector2(reader.GetFloat(), reader.GetFloat());
     }
 
     /// <summary>
@@ -77,11 +74,7 @@ public static class NetExtensions
     /// <returns>A Vector3.</returns>
     public static Vector3 DeserializeVector3(NetDataReader reader)
     {
-        Vector3 v;
-        v.x = reader.GetFloat();
-        v.y = reader.GetFloat();
-        v.z = reader.GetFloat();
-        return v;
+        return new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
     }
 
     /// <summary>
@@ -227,27 +220,27 @@ public static class NetExtensions
         switch (maxIndex)
         {
             case 0:
-                a = (short)(quaternion.y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                b = (short)(quaternion.z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                c = (short)(quaternion.w * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                a = (short)(quaternion.Y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                b = (short)(quaternion.Z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                c = (short)(quaternion.W * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
                 break;
 
             case 1:
-                a = (short)(quaternion.x * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                b = (short)(quaternion.z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                c = (short)(quaternion.w * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                a = (short)(quaternion.X * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                b = (short)(quaternion.Z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                c = (short)(quaternion.W * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
                 break;
 
             case 2:
-                a = (short)(quaternion.x * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                b = (short)(quaternion.y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                c = (short)(quaternion.w * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                a = (short)(quaternion.X * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                b = (short)(quaternion.Y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                c = (short)(quaternion.W * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
                 break;
 
             case 3:
-                a = (short)(quaternion.x * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                b = (short)(quaternion.y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
-                c = (short)(quaternion.z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                a = (short)(quaternion.X * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                b = (short)(quaternion.Y * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
+                c = (short)(quaternion.Z * maxValueSign * QUAT_FLOAT_PRECISION_MULT);
                 break;
 
             default:
@@ -290,8 +283,8 @@ public static class NetExtensions
     /// <param name="vector">The vector.</param>
     public static void SerializeVector2(NetDataWriter writer, Vector2 vector)
     {
-        writer.Put(vector.x);
-        writer.Put(vector.y);
+        writer.Put(vector.X);
+        writer.Put(vector.Y);
     }
 
     /// <summary>
@@ -301,9 +294,9 @@ public static class NetExtensions
     /// <param name="vector">The vector.</param>
     public static void SerializeVector3(NetDataWriter writer, Vector3 vector)
     {
-        writer.Put(vector.x);
-        writer.Put(vector.y);
-        writer.Put(vector.z);
+        writer.Put(vector.X);
+        writer.Put(vector.Y);
+        writer.Put(vector.Z);
     }
 
     /// <summary>
