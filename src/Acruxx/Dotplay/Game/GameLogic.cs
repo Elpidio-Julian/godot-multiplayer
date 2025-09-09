@@ -158,7 +158,14 @@ public partial class GameLogic : SubViewport, IGameLogic
         {
             parent.ProcessMode = ProcessModeEnum.Always;
             Logger.LogDebug(this, "Found parent set size: " + parent.Size);
-            this.Size = new Vector2I((int)parent.Size.X, (int)parent.Size.Y);
+            if (parent is SubViewportContainer svc && svc.Stretch)
+            {
+                // When Stretch is enabled, the container controls SubViewport size; skip manual resize
+            }
+            else
+            {
+                this.Size = new Vector2I((int)parent.Size.X, (int)parent.Size.Y);
+            }
         }
 
         Logger.LogDebug(this, "Service amount: " + this.Services.All.Length);

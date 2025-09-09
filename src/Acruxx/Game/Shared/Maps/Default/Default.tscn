@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://cnwhiwkp45dcu"]
 
-[ext_resource type="Script" path="res://src/Acruxx/Game/Shared/Maps/Default/DefaultGameLevel.cs" id="1_1lgqm"]
-[ext_resource type="Script" path="res://src/Acruxx/Game/Shared/Maps/Default/DefaultSpawnPoint.cs" id="2_dy2n3"]
+[ext_resource type="Script" uid="uid://s0ne7x2urnsu" path="res://src/Acruxx/Game/Shared/Maps/Default/DefaultGameLevel.cs" id="1_1lgqm"]
+[ext_resource type="Script" uid="uid://dtidbras7yh6c" path="res://src/Acruxx/Game/Shared/Maps/Default/DefaultSpawnPoint.cs" id="2_dy2n3"]
 [ext_resource type="Environment" uid="uid://b7qut6ext3adg" path="res://assets/environments/default-env.tres" id="2_w4yol"]
-[ext_resource type="Material" uid="uid://d12h4bnp7mhvs" path="res://assets/materials/Red.material" id="3_1t4fl"]
+[ext_resource type="Material" path="res://assets/materials/Red.tres" id="3_1t4fl"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_dmpen"]
 size = Vector2(25, 25)

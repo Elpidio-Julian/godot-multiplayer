@@ -339,20 +339,25 @@ public partial class NetworkClientLogic : GameLogic
 
         this._netService = this.Services.Create<ClientNetworkService>();
         this._netService.OnDisconnect += this.OnInternalDisconnect;
-        this._netService.Connected += this.OnConnected;
+        this._netService.Connected += () => this.CallDeferred(nameof(OnConnected));
 
         this._netService.SubscribeSerialisable<ClientWorldLoader>((package, _) =>
         {
-            this.OnConnected();
+            this.CallDeferred(nameof(OnConnected));
 
             if (this._loadedWorldName != package.WorldName)
             {
                 this._loadedWorldName = package.WorldName;
-                this.LoadWorldInternal(package.WorldName, package.ScriptPath, package.WorldTick);
+                this.CallDeferred(nameof(DeferredLoadWorld), package.WorldName, package.ScriptPath, (long)package.WorldTick);
             }
         });
 
         base.InternalTreeEntered();
+    }
+
+    private void DeferredLoadWorld(string path, string scriptPath, long worldTick)
+    {
+        this.LoadWorldInternal(path, scriptPath, (uint)worldTick);
     }
 
     /// <inheritdoc />

@@ -44,6 +44,16 @@ namespace RCON
 
             _clients = new List<TcpClient>();
             _listener = new TcpListener(bindAddress, port);
+            try
+            {
+                // Make restarts less likely to fail after a recent bind
+                _listener.Server.ExclusiveAddressUse = false;
+                _listener.Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            }
+            catch
+            {
+                // Ignore if platform/socket does not support these options
+            }
         }
 
         /// <summary>

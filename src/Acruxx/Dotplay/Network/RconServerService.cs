@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using Godot;
 using RCON;
@@ -11,13 +14,15 @@ namespace Dotplay.Network;
 /// </summary>
 public class RconServerService : IService
 {
+    [Export]
+    public bool EnableRcon { get; set; } = true;
     /// <summary>
     /// The RCON server port
     /// </summary>
     [Export]
     public int RconPort = 27020;
 
-    private readonly RemoteConServer? _server;
+    private RemoteConServer? _server;
 
     public delegate void ServerStartedHandler(CommandManager manager);
 
@@ -31,7 +36,30 @@ public class RconServerService : IService
     /// <inheritdoc />
     public void Register()
     {
-        var server = new RemoteConServer(IPAddress.Any, this.RconPort)
+        // Allow disabling via inspector or CLI: --no-rcon
+        if (!this.EnableRcon)
+        {
+            return;
+        }
+
+        var args = OS.GetCmdlineArgs();
+        if (args.Any(a => a.Equals("--no-rcon", StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        var port = this.RconPort;
+        var portArg = args.FirstOrDefault(a => a.StartsWith("--rcon-port=", StringComparison.OrdinalIgnoreCase));
+        if (portArg != null)
+        {
+            var value = portArg.Split('=');
+            if (value.Length == 2 && int.TryParse(value[1], out var parsed))
+            {
+                port = parsed;
+            }
+        }
+
+        var server = new RemoteConServer(IPAddress.Any, port)
         {
             SendAuthImmediately = true,
             Debug = true
@@ -77,7 +105,17 @@ public class RconServerService : IService
             return sb.ToString();
         });
 
-        server.StartListening();
+        try
+        {
+            server.StartListening();
+        }
+        catch (SocketException ex) when (ex.SocketErrorCode == SocketError.AddressAlreadyInUse)
+        {
+            GD.PushWarning($"RCON: Port {port} already in use. Skipping RCON start on this instance.");
+            return;
+        }
+
+        this._server = server;
         ServerStarted?.Invoke(server.CommandManager);
     }
 
